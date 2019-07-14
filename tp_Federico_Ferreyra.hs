@@ -100,6 +100,12 @@ obtenerDig g dni = if((mod(sum(verificarCuil (reverse ((digits g) ++ (digits dni
 informaLista :: [Integer] -> [String]
 informaLista = map informa
 
+----------------------------------------------- PUNTO 6 -------------------------------------------
+
+generaLista :: [(Genero,Integer)] -> [String]
+generaLista [] = []
+generaLista ((a,b):xs) = genera a b : generaLista xs
+
 -- -------------------------------------------- TEST PUNTO 7 ---------------------------------------
 
 --------------------------------- TEST ANALIZA --------------------------------------
@@ -151,3 +157,14 @@ testInformaLista = if todoOk
                                                 "Persona, DNI unico, Femenino,Prefijo: 23, DNI: 39371613, Digito Verificador: 4",
                                                 "Persona, DNI unico, Femenino,Prefijo: 23, DNI: 39371806, Digito Verificador: 4"]
             mensajeError = "Todo mal! - No se pudieron analizar todos los CUITs"
+
+
+cuitsGeneroOk = [(Masculino, 39146980), (Femenino, 24721430), (Masculino, 39146980), (Masculino, 27371578),(Femenino, 39371613), (Femenino, 39371806)]
+
+testGeneraLista :: String
+testGeneraLista = if todoOk
+                  then "Todo Ok"
+                  else mensajeError
+      where todoOk = (generaLista cuitsGeneroOk) == ["20391469807","27247214300","20391469807",
+                                                     "23273715789","23393716134","23393718064"]
+            mensajeError = "Todo mal! - No se pudieron generar todos los CUITs"
