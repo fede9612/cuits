@@ -75,7 +75,6 @@ data Persona = Persona Genero Integer String deriving Show
 -- Género masculino o femenino
 data Genero = Femenino | Masculino deriving (Eq,Show)
 
--- g es hombre
 genera :: Genero -> Integer -> String
 genera g dni = (show genero) ++ (show dni) ++ (show digVerificador)
         where genero = obtenerGen dni g
@@ -96,9 +95,14 @@ obtenerDig g dni = if((mod(sum(verificarCuil (reverse ((digits g) ++ (digits dni
                     else 11 - (mod(sum(reverse(verificarCuil ( reverse ((digits g) ++ (digits dni))) 2))) 11)
 
 
+----------------------------------------------- PUNTO 5 -------------------------------------------
 
+informaLista :: [Integer] -> [String]
+informaLista = map informa
 
 -- -------------------------------------------- TEST PUNTO 7 ---------------------------------------
+
+--------------------------------- TEST ANALIZA --------------------------------------
 cuitsOk :: [Integer]
 cuitsOk = [20929014740, 20391469807, 27247214300, 23273715789, 23393716134, 23393718064]
 
@@ -117,7 +121,7 @@ testAnaliza = if todoOk
           errCuitsNOk = show $ filter analiza cuitsNOk
 
 
-
+---------------------------------- TEST GENERA -----------------------------------------
 personas :: [Persona]
 personas = [Persona Masculino 92901474 "20929014740",
             Persona Femenino 24721430  "27247214300",
@@ -134,3 +138,16 @@ testGenera = if todoOk
            cuitOk (Persona g dni cuit) = (genera g dni) == cuit
            mensajeError = "Todo Mal! - Personas con CUIT mal generado: " ++ errCuits
            errCuits = show $ filter (not.cuitOk) personas
+
+------------------------------ TEST INFORMA LISTA -----------------------------------------
+testInformaLista :: String
+testInformaLista = if todoOk
+                then "Todo Ok"
+                else mensajeError
+      where todoOk = (informaLista cuitsOk) == ["Persona, DNI unico, Masculino,Prefijo: 20, DNI: 92901474, Digito Verificador: 0",
+                                                "Persona, DNI unico, Masculino,Prefijo: 20, DNI: 39146980, Digito Verificador: 7",
+                                                "Persona, DNI unico, Femenino,Prefijo: 27, DNI: 24721430, Digito Verificador: 0",
+                                                "Persona, DNI unico, Femenino,Prefijo: 23, DNI: 27371578, Digito Verificador: 9",
+                                                "Persona, DNI unico, Femenino,Prefijo: 23, DNI: 39371613, Digito Verificador: 4",
+                                                "Persona, DNI unico, Femenino,Prefijo: 23, DNI: 39371806, Digito Verificador: 4"]
+            mensajeError = "Todo mal! - No se pudieron analizar todos los CUITs"
