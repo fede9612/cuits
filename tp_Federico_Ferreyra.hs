@@ -69,7 +69,7 @@ obtenerDigList cuit = head(reverse(cuit))
 
 -- ----------------------------------- Punto 4 ---------------------------------------
 
--- Persona tiene un género, un dni y posiblemente un cuit válido
+-- Persona tiene un género, un dni y un cuit válido
 data Persona = Persona Genero Integer String deriving Show
 
 -- Género masculino o femenino
@@ -81,11 +81,11 @@ genera g dni = (show genero) ++ (show dni) ++ (show digVerificador)
               digVerificador = obtenerDig genero dni
 
 obtenerGen :: Integer -> Genero -> Integer
-obtenerGen dni g = if((obtenerDig 20 dni) == 10 || (obtenerDig 27 dni) == 10)
-                then 23
-                else if (g == Masculino)
+obtenerGen dni g = if((obtenerDig 20 dni) /= 10 && g == Masculino)
                 then 20
-                else 27
+                else if ((obtenerDig 27 dni) /= 10 && g == Femenino)
+                then 27
+                else 23
 
 obtenerDig :: Integer -> Integer -> Int
 obtenerDig g dni = if((mod(sum(verificarCuil (reverse ((digits g) ++ (digits dni))) 2)) 11) == 11
@@ -103,8 +103,7 @@ informaLista = map informa
 ----------------------------------------------- PUNTO 6 -------------------------------------------
 
 generaLista :: [(Genero,Integer)] -> [String]
-generaLista [] = []
-generaLista ((a,b):xs) = genera a b : generaLista xs
+generaLista xs = map (\(a,b) -> (genera a b)) xs
 
 -- -------------------------------------------- TEST PUNTO 7 ---------------------------------------
 
@@ -161,6 +160,7 @@ testInformaLista = if todoOk
 
 cuitsGeneroOk = [(Masculino, 39146980), (Femenino, 24721430), (Masculino, 39146980), (Masculino, 27371578),(Femenino, 39371613), (Femenino, 39371806)]
 
+-------------------------- TEST GENERA LISTA ---------------------------------------------
 testGeneraLista :: String
 testGeneraLista = if todoOk
                   then "Todo Ok"
